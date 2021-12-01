@@ -43,17 +43,6 @@ func (r *Root) history(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	for i, ba := range out {
-		if ba.App == "" {
-			r.Logger.Info(fmt.Sprintf("Alert %v is missing app", i), zap.Any("alert", json.RawMessage(bodyBytes)))
-			break
-		}
-		if ba.Namespace == "" {
-			r.Logger.Info(fmt.Sprintf("Alert %v is missing namespace", i), zap.Any("alert", json.RawMessage(bodyBytes)))
-			break
-		}
-	}
-
 	err = persister.Persist(context.Background(), out)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
