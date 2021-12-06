@@ -1,14 +1,16 @@
 package models
 
 import (
+	"strings"
 	"time"
 
+	"cloud.google.com/go/bigquery"
 	"cloud.google.com/go/civil"
 )
 
 type Labels struct {
 	Alert               string
-	Name                string `json:"alertname"`
+	Alertname           string `json:"alertname"`
 	Deployment          string `json:"deployment"`
 	App                 string `json:"app"`
 	LogApp              string `json:"log_app"`
@@ -42,26 +44,35 @@ type AlertRequest struct {
 	GroupKey          string
 }
 
-type BqAlert struct {
-	Name        string
-	Alert       string
-	App         string
-	Namespace   string
-	StartsAt    civil.DateTime `bigquery:"starts_at"`
-	EndsAt      civil.DateTime `bigquery:"ends_at"`
-	Status      string
-	Fingerprint string
+type BigQueryAlert struct {
+	Alertname         string
+	Receiver          string
+	App               string
+	Namespace         string
+	TriggerdNamespace string                `bigquery:"triggered_namespace"`
+	StartsAt          civil.DateTime        `bigquery:"starts_at"`
+	EndsAt            bigquery.NullDateTime `bigquery:"ends_at"`
+	Status            string
+	Fingerprint       string
 }
 
-func (a *Alert) AsBQAlert() (BqAlert, error) {
+func (a *Alert) AsBigQueryAlert() (BigQueryAlert, error) {
 	startsAt, err := civil.ParseDateTime(a.StartsAt.Format("2006-01-02t15:04:05.999999999"))
 	if err != nil {
-		return BqAlert{}, err
+		return BigQueryAlert{}, err
 	}
 
-	endsAt, err := civil.ParseDateTime(a.EndsAt.Format("2006-01-02t15:04:05.999999999"))
+	endsAt, err := civil.ParseDateTime(a.EndsAt.Format("2006-01-02t15:04:05.999999"))
 	if err != nil {
-		return BqAlert{}, err
+		return BigQueryAlert{}, err
+	}
+	nullEndsAt := bigquery.NullDateTime{
+		DateTime: endsAt,
+		Valid:    true,
+	}
+
+	if endsAt.String() == "0001-01-01T00:00:00" {
+		nullEndsAt.Valid = false
 	}
 
 	app := a.Labels.App
@@ -78,33 +89,34 @@ func (a *Alert) AsBQAlert() (BqAlert, error) {
 		app = a.Labels.KubernetesName
 	}
 
-	namespace := a.Labels.Namespace
-	if namespace == "" {
-		namespace = a.Labels.LogNamespace
+	triggeredNamespace := a.Labels.Namespace
+	if triggeredNamespace == "" {
+		triggeredNamespace = a.Labels.LogNamespace
 	}
-	if namespace == "" {
-		namespace = a.Labels.LinkerdNamespace
+	if triggeredNamespace == "" {
+		triggeredNamespace = a.Labels.LinkerdNamespace
 	}
-	if namespace == "" {
-		namespace = a.Labels.KubernetesNamespace
+	if triggeredNamespace == "" {
+		triggeredNamespace = a.Labels.KubernetesNamespace
 	}
 
-	return BqAlert{
-		Name:        a.Labels.Name,
-		Alert:       a.Labels.Alert,
-		App:         app,
-		Namespace:   namespace,
-		StartsAt:    startsAt,
-		EndsAt:      endsAt,
-		Status:      a.Status,
-		Fingerprint: a.Fingerprint,
+	return BigQueryAlert{
+		Alertname:         a.Labels.Alertname,
+		Receiver:          a.Labels.Alert,
+		App:               app,
+		Namespace:         strings.Split(a.Labels.Alert, "-")[0],
+		TriggerdNamespace: triggeredNamespace,
+		StartsAt:          startsAt,
+		EndsAt:            nullEndsAt,
+		Status:            a.Status,
+		Fingerprint:       a.Fingerprint,
 	}, nil
 }
 
-func (ar *AlertRequest) ForBQ() ([]BqAlert, error) {
-	var out []BqAlert
+func (ar *AlertRequest) ToBigQuery() ([]BigQueryAlert, error) {
+	var out []BigQueryAlert
 	for _, a := range ar.Alerts {
-		toBQ, err := a.AsBQAlert()
+		toBQ, err := a.AsBigQueryAlert()
 		if err != nil {
 			return nil, err
 		}
