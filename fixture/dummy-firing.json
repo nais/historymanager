@@ -1,0 +1,47 @@
+{
+  "receiver": "everything",
+  "status": "firing",
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alert": "default-k9-ettersending-mottak-alerts",
+        "alertname": "høy feilrate i logger i k9-ettersending-mottak",
+        "log_app": "k9-ettersending-mottak",
+        "log_namespace": "default"
+      },
+      "annotations": {
+        "action": "Sjekk loggene til app k9-ettersending-mottak i namespace default, for å se hvorfor det er så mye feil",
+        "description": "",
+        "documentation": "",
+        "prependText": "<!here> | ",
+        "severity": "danger",
+        "sla": ""
+      },
+      "startsAt": "2020-05-12T13:34:12.496846534Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "https://prometheus.dev-fss.nais.io/graph?g0.expr=%28100+%2A+sum+by%28log_app%2C+log_namespace%29+%28rate%28logd_messages_total%7Blog_app%3D%22k9-ettersending-mottak%22%2Clog_level%3D~%22Warning%7CError%22%7D%5B3m%5D%29%29+%2F+sum+by%28log_app%2C+log_namespace%29+%28rate%28logd_messages_total%7Blog_app%3D%22k9-ettersending-mottak%22%7D%5B3m%5D%29%29%29+%3E+10&g0.tab=1",
+      "fingerprint": "3ff18ed9592f38e7"
+    }
+  ],
+  "groupLabels": {
+    "alertname": "høy feilrate i logger i k9-ettersending-mottak"
+  },
+  "commonLabels": {
+    "alert": "default-k9-ettersending-mottak-alerts",
+    "alertname": "høy feilrate i logger i k9-ettersending-mottak",
+    "log_app": "k9-ettersending-mottak",
+    "log_namespace": "default"
+  },
+  "commonAnnotations": {
+    "action": "Sjekk loggene til app k9-ettersending-mottak i namespace default, for å se hvorfor det er så mye feil",
+    "description": "",
+    "documentation": "",
+    "prependText": "<!here> | ",
+    "severity": "danger",
+    "sla": ""
+  },
+  "externalURL": "https://alertmanager.dev-fss.nais.io",
+  "version": "4",
+  "groupKey": "{}/{alerts=~\"^(?:.*)$\"}:{alertname=\"høy feilrate i logger i k9-ettersending-mottak\"}"
+}
