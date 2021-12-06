@@ -2,15 +2,14 @@ package persister
 
 import (
 	"context"
+	"os"
 
 	"cloud.google.com/go/bigquery"
 	"github.com/nais/historymanager/pkg/models"
 )
 
-const BigQueryProjectID = "aura-dev-d9f5"
-
-func Persist(ctx context.Context, topics []models.BqAlert) error {
-	client, err := bigquery.NewClient(ctx, BigQueryProjectID)
+func Persist(ctx context.Context, topics []models.BigQueryAlert) error {
+	client, err := bigquery.NewClient(ctx, os.Getenv("PROJECT_ID"))
 	if err != nil {
 		return err
 	}

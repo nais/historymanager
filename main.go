@@ -36,17 +36,17 @@ func (r *Root) history(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	out, err := alertRequest.ForBQ()
+	out, err := alertRequest.ToBigQuery()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		r.Logger.Error("Can't convert alert to BQ", zap.Any("alert", json.RawMessage(bodyBytes)), zap.Error(err))
+		r.Logger.Error("Can't convert alert to BigQquery model", zap.Any("alert", json.RawMessage(bodyBytes)), zap.Error(err))
 		return
 	}
 
 	err = persister.Persist(context.Background(), out)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		r.Logger.Error("Can't persist alert to BQ", zap.Any("alert", json.RawMessage(bodyBytes)), zap.Error(err))
+		r.Logger.Error("Can't persist alert to BigQuery", zap.Any("alert", json.RawMessage(bodyBytes)), zap.Error(err))
 		return
 	}
 
