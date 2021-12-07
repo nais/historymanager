@@ -23,3 +23,34 @@ jobs:
       - name: Set IMAGE as output
         id: image
         run: echo ::set-output name=image::${IMAGE}
+
+  deploy:
+    name: Deploy to Kubernetes
+    needs: build-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: navikt/github-app-token-generator@v1
+        id: get-token
+        with:
+          private-key: ${{ secrets.NAIS_APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.NAIS_APP_ID }}
+          repo: navikt/nais-yaml
+      - name: Checkout nais-yaml
+        uses: actions/checkout@v2
+        with:
+          repository: navikt/nais-yaml
+          token: ${{ steps.get-token.outputs.token }}
+          path: nais-yaml
+      - name: Bump version in nais-yaml
+        run: |
+          export version=${{needs.build-push.outputs.image}}
+          cd nais-yaml
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          sed -E -i "s#image: ghcr.io/${GITHUB_REPOSITORY}:.+#image: ${version}#" vars/global.yaml
+          git add .
+          git --no-pager diff --cached
+          git commit -a -m "Bump ${GITHUB_REPOSITORY} to version ${version}"
+          git push
