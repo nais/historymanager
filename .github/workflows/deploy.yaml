@@ -52,5 +52,5 @@ jobs:
           sed -E -i "s#image: ghcr.io/${GITHUB_REPOSITORY}:.+#image: ${version}#" vars/global.yaml
           git add .
           git --no-pager diff --cached
-          git commit -a -m "Bump ${GITHUB_REPOSITORY} to version ${version}"
+          git commit -a -m "Bump ${version}"
           git push
