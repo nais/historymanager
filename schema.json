@@ -1,0 +1,52 @@
+[
+  {
+    "description": "Navn på alert",
+    "name": "alertname",
+    "type": "STRING"
+  },
+  {
+    "description": "Navn på alert-ressurs hos Alertmanager",
+    "name": "receiver",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "description": "Navn på app som trigget alert (hentes fra labels i alert)",
+    "name": "app",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "description": "Namespace alert-ressursen er opprettet i (hentes fra receiver-felt)",
+    "name": "namespace",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "description": "Namespace som alert-en ble varslet i (hentes fra labels i alert)",
+    "name": "triggered_namespace",
+    "type": "STRING"
+  },
+  {
+    "name": "starts_at",
+    "type": "DATETIME"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "ends_at",
+    "type": "DATETIME"
+  },
+  {
+    "name": "status",
+    "type": "STRING"
+  },
+  {
+    "description": "Unik ID for per alert",
+    "name": "fingerprint",
+    "type": "STRING"
+  },
+  {
+    "name": "cluster",
+    "type": "STRING"
+  }
+]
