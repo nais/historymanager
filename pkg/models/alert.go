@@ -1,6 +1,7 @@
 package models
 
 import (
+	"os"
 	"strings"
 	"time"
 
@@ -54,6 +55,7 @@ type BigQueryAlert struct {
 	EndsAt            bigquery.NullDateTime `bigquery:"ends_at"`
 	Status            string
 	Fingerprint       string
+	Cluster           string
 }
 
 func (a *Alert) AsBigQueryAlert() (BigQueryAlert, error) {
@@ -110,6 +112,7 @@ func (a *Alert) AsBigQueryAlert() (BigQueryAlert, error) {
 		EndsAt:            nullEndsAt,
 		Status:            a.Status,
 		Fingerprint:       a.Fingerprint,
+		Cluster:           os.Getenv("NAIS_CLUSTER_NAME"),
 	}, nil
 }
 
