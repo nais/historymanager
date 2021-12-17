@@ -7,6 +7,8 @@ import (
 
 	"cloud.google.com/go/bigquery"
 	"cloud.google.com/go/civil"
+	nais_io_v1 "github.com/nais/liberator/pkg/apis/nais.io/v1"
+	"k8s.io/client-go/tools/cache"
 )
 
 type Labels struct {
@@ -58,7 +60,24 @@ type BigQueryAlert struct {
 	Cluster           string
 }
 
-func (a *Alert) AsBigQueryAlert() (BigQueryAlert, error) {
+func getFromStoreByDashKey(store cache.Store, name string) (string, error) {
+	for _, v := range store.ListKeys() {
+		key := strings.Replace(v, "/", "-", 1)
+		if key == name {
+			item, _, err := store.GetByKey(v)
+
+			if err != nil {
+				return "", err
+			}
+			naisAlert := item.(*nais_io_v1.Alert)
+			return naisAlert.Namespace, nil
+		}
+	}
+
+	return "", nil
+}
+
+func (a *Alert) AsBigQueryAlert(store cache.Store) (BigQueryAlert, error) {
 	startsAt, err := civil.ParseDateTime(a.StartsAt.Format("2006-01-02t15:04:05.999999999"))
 	if err != nil {
 		return BigQueryAlert{}, err
@@ -102,11 +121,16 @@ func (a *Alert) AsBigQueryAlert() (BigQueryAlert, error) {
 		triggeredNamespace = a.Labels.KubernetesNamespace
 	}
 
+	namespace, err := getFromStoreByDashKey(store, a.Labels.Alert)
+	if err != nil {
+		return BigQueryAlert{}, err
+	}
+
 	return BigQueryAlert{
 		Alertname:         a.Labels.Alertname,
 		Receiver:          a.Labels.Alert,
 		App:               app,
-		Namespace:         strings.Split(a.Labels.Alert, "-")[0],
+		Namespace:         namespace,
 		TriggerdNamespace: triggeredNamespace,
 		StartsAt:          startsAt,
 		EndsAt:            nullEndsAt,
@@ -116,10 +140,10 @@ func (a *Alert) AsBigQueryAlert() (BigQueryAlert, error) {
 	}, nil
 }
 
-func (ar *AlertRequest) ToBigQuery() ([]BigQueryAlert, error) {
+func (ar *AlertRequest) ToBigQuery(store cache.Store) ([]BigQueryAlert, error) {
 	var out []BigQueryAlert
 	for _, a := range ar.Alerts {
-		toBQ, err := a.AsBigQueryAlert()
+		toBQ, err := a.AsBigQueryAlert(store)
 		if err != nil {
 			return nil, err
 		}
