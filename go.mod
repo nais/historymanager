@@ -51,7 +51,7 @@ require (
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/googleapis/gax-go/v2 v2.1.0 // indirect
 	go.opencensus.io v0.23.0 // indirect
-	go.uber.org/zap v1.19.1
+	go.uber.org/zap v1.24.0
 	golang.org/x/net v0.7.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f // indirect
 	golang.org/x/sys v0.5.0 // indirect
