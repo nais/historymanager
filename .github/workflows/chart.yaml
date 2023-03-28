@@ -28,5 +28,7 @@ jobs:
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
       - uses: azure/setup-helm@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: helm package charts
       - run: helm push historymanager*.tgz oci://europe-north1-docker.pkg.dev/nais-io/nais
