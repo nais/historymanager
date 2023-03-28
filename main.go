@@ -10,18 +10,12 @@ import (
 
 	"github.com/nais/historymanager/pkg/models"
 	"github.com/nais/historymanager/pkg/persister"
-	"github.com/nais/historymanager/pkg/v1alerts"
-	naisiov1 "github.com/nais/liberator/pkg/apis/nais.io/v1"
 	"go.uber.org/zap"
-	"k8s.io/client-go/kubernetes/scheme"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/azure"
-	"k8s.io/client-go/tools/cache"
-	"k8s.io/client-go/tools/clientcmd"
 )
 
 type Root struct {
 	Logger *zap.Logger
-	Store  cache.Store
 }
 
 func (r *Root) history(w http.ResponseWriter, req *http.Request) {
@@ -44,7 +38,7 @@ func (r *Root) history(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	out, err := alertRequest.ToBigQuery(r.Store)
+	out, err := alertRequest.ToBigQuery()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		r.Logger.Error("Can't convert alert to BigQquery model", zap.Any("alert", json.RawMessage(bodyBytes)), zap.Error(err))
@@ -80,18 +74,6 @@ func main() {
 	r.Logger = logger
 	defer logger.Sync()
 
-	config, err := clientcmd.BuildConfigFromFlags("", os.Getenv("KUBECONFIG"))
-	if err != nil {
-		panic(err.Error())
-	}
-
-	naisiov1.AddToScheme(scheme.Scheme)
-	clientSet, err := v1alerts.NewForConfig(config)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	r.Store = v1alerts.WatchAlerts(context.Background(), clientSet)
 	logger.Info("The ancient books slowly crumbled, their secrets turning to dust. But their every word sings within the BigQuery's head.")
 
 	http.HandleFunc("/history", r.history)

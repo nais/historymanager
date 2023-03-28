@@ -17,14 +17,8 @@
   },
   {
     "mode": "NULLABLE",
-    "description": "Namespace alert-ressursen er opprettet i (hentes fra receiver-felt)",
+    "description": "Namespace alert-en hører til",
     "name": "namespace",
-    "type": "STRING"
-  },
-  {
-    "mode": "NULLABLE",
-    "description": "Namespace som alert-en ble varslet i (hentes fra labels i alert)",
-    "name": "triggered_namespace",
     "type": "STRING"
   },
   {
@@ -41,7 +35,7 @@
     "type": "STRING"
   },
   {
-    "description": "Unik ID for per alert",
+    "description": "Unik ID per alert",
     "name": "fingerprint",
     "type": "STRING"
   },

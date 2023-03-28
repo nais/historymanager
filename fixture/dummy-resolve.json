@@ -1,69 +1,46 @@
 {
-    "receiver": "historymanager",
-    "status": "resolved",
-    "alerts": [
-        {
-            "status": "resolved",
-            "labels": {
-                "alert": "nais-nais-alerts",
-                "alertname": "AlertmanagerReload",
-                "app": "prometheus",
-                "app_kubernetes_io_managed_by": "Helm",
-                "chart": "prometheus-11.12.0",
-                "component": "alertmanager",
-                "heritage": "Helm",
-                "instance": "10.6.74.45:9093",
-                "job": "kubernetes-service-endpoints",
-                "kubernetes_name": "nais-prometheus-alertmanager",
-                "kubernetes_namespace": "nais",
-                "kubernetes_pod_node_name": "gke-dev-gcp-bignodes-0-27b025e8-ce1b",
-                "release": "nais-prometheus"
-            },
-            "annotations": {
-                "action": "<https://logs.adeo.no/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(from:now-1h,mode:quick,to:now))&_a=(columns:!(message,level,application,host,cluster),index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:lucene,query:'%2Bcluster:%22dev-gcp%22%20%2Bapplication:%22prometheus-alertmanager%22%20%2Blevel:Error'),sort:!('@timestamp',desc))|Check Prometheus logs>",
-                "description": "Reloading of Alertmanager config failed",
-                "documentation": "",
-                "prependText": "",
-                "recipients": "",
-                "severity": "danger",
-                "sla": ""
-            },
-            "startsAt": "2021-11-26T17:39:19.152Z",
-            "endsAt": "2021-11-26T17:40:19.152Z",
-            "generatorURL": "https://prometheus.dev-gcp.nais.io/graph?g0.expr=alertmanager_config_last_reload_successful+%3C+1&g0.tab=1",
-            "fingerprint": "1361c8d49194cd91"
-        }
-    ],
-    "groupLabels": {
-        "alertname": "AlertmanagerReload",
-        "kubernetes_namespace": "nais"
-    },
-    "commonLabels": {
-        "alert": "nais-nais-alerts",
-        "alertname": "AlertmanagerReload",
-        "app": "prometheus",
-        "app_kubernetes_io_managed_by": "Helm",
-        "chart": "prometheus-11.12.0",
-        "component": "alertmanager",
-        "heritage": "Helm",
-        "instance": "10.6.74.45:9093",
-        "job": "kubernetes-service-endpoints",
-        "kubernetes_name": "nais-prometheus-alertmanager",
-        "kubernetes_namespace": "nais",
-        "kubernetes_pod_node_name": "gke-dev-gcp-bignodes-0-27b025e8-ce1b",
-        "release": "nais-prometheus"
-    },
-    "commonAnnotations": {
-        "action": "<https://logs.adeo.no/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0),time:(from:now-1h,mode:quick,to:now))&_a=(columns:!(message,level,application,host,cluster),index:'96e648c0-980a-11e9-830a-e17bbd64b4db',interval:auto,query:(language:lucene,query:'%2Bcluster:%22dev-gcp%22%20%2Bapplication:%22prometheus-alertmanager%22%20%2Blevel:Error'),sort:!('@timestamp',desc))|Check Prometheus logs>",
-        "description": "Reloading of Alertmanager config failed",
-        "documentation": "",
-        "prependText": "",
-        "recipients": "",
-        "severity": "danger",
-        "sla": ""
-    },
-    "externalURL": "https://alertmanager.dev-gcp.nais.io",
-    "version": "4",
-    "groupKey": "{}/{alert=~\"^(?:.*)$\"}:{alertname=\"AlertmanagerReload\", kubernetes_namespace=\"nais\"}",
-    "truncatedAlerts": 0
+  "receiver": "nais-system/history/historymanager",
+  "status": "resolved",
+  "alerts": [
+    {
+      "status": "resolved",
+      "labels": {
+        "alertname": "way to much secrecy",
+        "namespace": "nais-system",
+        "prometheus": "nais-system/monitoring-nais-prometheus",
+        "severity": "warning",
+        "tenant": "nav",
+        "tenant_cluster": "dev-gcp",
+        "tenant_cluster_id": "nav-dev-gcp"
+      },
+      "annotations": {
+        "action": "very secret",
+        "summary": "oh so secret"
+      },
+      "startsAt": "2023-03-28T09:07:21.147Z",
+      "endsAt": "2023-03-28T09:21:51.147Z",
+      "generatorURL": "https://nais-prometheus.dev-gcp.nav.cloud.nais.io/graph?g0.expr=count%28up%29+%3E+0&g0.tab=1",
+      "fingerprint": "c3118af758ae9eb4"
+    }
+  ],
+  "groupLabels": {
+    "alertname": "way to much secrecy"
+  },
+  "commonLabels": {
+    "alertname": "way to much secrecy",
+    "namespace": "nais-system",
+    "prometheus": "nais-system/monitoring-nais-prometheus",
+    "severity": "warning",
+    "tenant": "nav",
+    "tenant_cluster": "dev-gcp",
+    "tenant_cluster_id": "nav-dev-gcp"
+  },
+  "commonAnnotations": {
+    "action": "very secret",
+    "summary": "oh so secret"
+  },
+  "externalURL": "https://nais-alertmanager.dev-gcp.nav.cloud.nais.io",
+  "version": "4",
+  "groupKey": "{}/{namespace=\"nais-system\"}:{alertname=\"way to much secrecy\"}",
+  "truncatedAlerts": 0
 }
