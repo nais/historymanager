@@ -2,4 +2,4 @@ apiVersion: v2
 name: historymanager
 description: Archives all alerts to BigQuery
 type: application
-version: 1.0.2
+version: 1.0.3
