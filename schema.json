@@ -22,6 +22,12 @@
     "type": "STRING"
   },
   {
+    "mode": "NULLABLE",
+    "description": "Deprecated",
+    "name": "triggered_namespace",
+    "type": "STRING"
+  },
+  {
     "name": "starts_at",
     "type": "DATETIME"
   },
