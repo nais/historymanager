@@ -1,5 +1,7 @@
-Image: "europe-north1-docker.pkg.dev/nais-io/nais/images/historymanager:latest"
-BigQuery:
-  ProjectID: "prosjekt-id"
-  ServiceAccountToken: "JWT"
-Onprem: false
+image:
+  name: europe-north1-docker.pkg.dev/nais-io/nais/images/historymanager
+  tag: latest
+bigQuery:
+  projectID: "prosjekt-id"
+  serviceAccountToken: "JWT"
+onprem: false

@@ -5,9 +5,9 @@ metadata:
   labels:
     team: aura
 spec:
-  image: {{ .Values.Image }}
+  image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
   port: 8080
-  {{- if .Values.Onprem }}
+  {{- if .Values.onprem }}
   webproxy: true
   {{- end }}
   filesFrom:
@@ -15,6 +15,6 @@ spec:
       mountPath: /var/run/secrets/gcp/
   env:
     - name: PROJECT_ID
-      value: {{ .Values.BigQuery.ProjectID }}
+      value: {{ .Values.bigQuery.projectID }}
     - name: GOOGLE_APPLICATION_CREDENTIALS
       value: /var/run/secrets/gcp/sa.json
