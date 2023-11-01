@@ -36,7 +36,7 @@ jobs:
           password: "${{ steps.auth.outputs.access_token }}"
       - name: Docker meta
         id: metadata
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/historymanager
           tags: |
