@@ -22,7 +22,7 @@ jobs:
           workload_identity_provider: ${{ secrets.NAIS_IO_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: 'gh-historymanager@nais-io.iam.gserviceaccount.com'
           token_format: 'access_token'
-      - uses: docker/login-action@v2
+      - uses: docker/login-action@v3
         with:
           registry: europe-north1-docker.pkg.dev
           username: oauth2accesstoken
